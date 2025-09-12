@@ -1,20 +1,21 @@
-import { Routes, Route, Link } from "react-router-dom";
-import HeroList from "./pages/HeroList";
+import { Routes, Route } from "react-router-dom";
+import HeroesPage from "./pages/HeroesPage";
 import HeroDetail from "./pages/HeroDetail";
+import NewHeroPage from "./pages/NewHeroPage";
+
+import { ThemeProvider } from "./components/theme-provider";
 
 function App() {
   return (
-    <div className="p-4">
-      <nav className="mb-4">
-        <Link to="/" className="text-blue-500">
-          Heroes
-        </Link>
-      </nav>
-      <Routes>
-        <Route path="/" element={<HeroList />} />
-        <Route path="/superheroes/:id" element={<HeroDetail />} />
-      </Routes>
-    </div>
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <div className="p-4">
+        <Routes>
+          <Route path="/" element={<HeroesPage />} />
+          <Route path="/superheroes/:id" element={<HeroDetail />} />
+          <Route path="/superheroes/new" element={<NewHeroPage />} />
+        </Routes>
+      </div>
+    </ThemeProvider>
   );
 }
 

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import type { Hero } from "../types";
-import api from "../api";
+import apiClient from "../api-client/api-client";
 
 export default function HeroDetail() {
   const { id } = useParams();
@@ -9,7 +9,7 @@ export default function HeroDetail() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api
+    apiClient
       .get<Hero>(`/api/superheroes/${id}`)
       .then((res) => setHero(res.data))
       .catch((err) => console.error(err))

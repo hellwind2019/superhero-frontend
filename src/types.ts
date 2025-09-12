@@ -5,4 +5,11 @@ export interface Hero {
   origin_description: string;
   superpowers: string[];
   catch_phrase: string;
+  first_image: string;
+}
+export interface HeroImage {
+  id?: number;
+  hero_id?: number;
+  image_url: string;
+  caption?: string;
 }
