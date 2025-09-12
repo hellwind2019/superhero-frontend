@@ -28,19 +28,44 @@ export default function HeroForm() {
     control,
     name: "superpowers" as never,
   });
-  const onSubmit = (data: Hero) => {
-    setIsLoading(true);
-    const formData = new FormData();
-    imageData.forEach((image) => formData.append("images", image.file));
-    apiClient
-      .post("api/images/upload", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      })
-      .then((res) => {
-        console.log(res.data);
-      });
-    apiClient.post("api/images");
+  const onSubmit = async (data: Hero) => {
+    try {
+      setIsLoading(true);
+
+      // 1️⃣ Upload all images
+      const formData = new FormData();
+      imageData.forEach((image) => formData.append("images", image.file));
+
+      const uploadRes = await apiClient.post<{ urls: string[] }>(
+        "api/images/upload",
+        formData,
+        { headers: { "Content-Type": "multipart/form-data" } }
+      );
+
+      const uploadedUrls = uploadRes.data.urls; // array of URLs
+
+      // 2️⃣ Create the hero
+      const heroRes = await apiClient.post<Hero>("api/superheroes", data);
+      const heroId = heroRes.data.id;
+
+      // 3️⃣ Post each image info to /api/images
+      const imagePosts = uploadedUrls.map((url) => ({
+        hero_id: heroId,
+        image_url: url,
+      }));
+
+      await Promise.all(
+        imagePosts.map((img) => apiClient.post("/api/images", img))
+      );
+
+      console.log("Hero and images created successfully!");
+    } catch (err) {
+      console.error("Error creating hero with images:", err);
+    } finally {
+      setIsLoading(false);
+    }
   };
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const imagesArray: UploadedImage[] = Array.from(e.target.files).map(
