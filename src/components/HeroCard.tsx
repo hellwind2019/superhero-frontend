@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
+import { Label } from "@radix-ui/react-label";
 
 interface Props {
   hero: Hero;
@@ -14,16 +15,14 @@ interface Props {
 
 const HeroCard = ({ hero }: Props) => {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{hero.nickname}</CardTitle>
-        <CardDescription>{hero.real_name}</CardDescription>
-      </CardHeader>
+    <Card className="p-0">
+      <img
+        src={hero.first_image}
+        alt=""
+        className="aspect-16/9 rounded-t-xl object-cover"
+      />
       <CardContent>
-        <img src={hero.first_image} alt="" />
-        {hero.superpowers.map((power) => (
-          <p key={power}>{power}</p>
-        ))}
+        <Label className="text-xl font-bold">{hero.nickname}</Label>
       </CardContent>
       <CardFooter>{/* <p>Card Footer</p> */}</CardFooter>
     </Card>

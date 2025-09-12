@@ -34,7 +34,6 @@ export default function HeroForm() {
     try {
       setIsLoading(true);
 
-      // 1️⃣ Upload all images
       const formData = new FormData();
       imageData.forEach((image) => formData.append("images", image.file));
 
@@ -44,13 +43,11 @@ export default function HeroForm() {
         { headers: { "Content-Type": "multipart/form-data" } }
       );
 
-      const uploadedUrls = uploadRes.data.urls; // array of URLs
+      const uploadedUrls = uploadRes.data.urls;
 
-      // 2️⃣ Create the hero
       const heroRes = await apiClient.post<Hero>("api/superheroes", data);
       const heroId = heroRes.data.id;
 
-      // 3️⃣ Post each image info to /api/images
       const imagePosts = uploadedUrls.map((url) => ({
         hero_id: heroId,
         image_url: url,
