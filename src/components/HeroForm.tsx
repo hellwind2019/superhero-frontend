@@ -3,11 +3,11 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useFieldArray, useForm } from "react-hook-form";
 import { Label } from "@radix-ui/react-label";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SuperpowerInputList from "@/components/SuperpowerInputList";
-import ImageUploader from "@/components/ImageUploader";
-
-import type { Hero } from "@/types";
+import Gallery from "@/components/Gallery";
+import type { Hero, HeroImage } from "@/types";
+import apiClient from "@/api-client/api-client";
 
 export interface UploadedImage {
   file: File;
@@ -16,7 +16,11 @@ export interface UploadedImage {
 
 interface HeroFormProps {
   initialData?: Hero; // для Edit
-  onSubmit: (data: Hero, images: UploadedImage[]) => Promise<void>;
+  onSubmit: (
+    data: Hero,
+    images: UploadedImage[],
+    deletedImageIDs?: number[]
+  ) => Promise<void>;
   isLoading?: boolean;
 }
 
@@ -25,8 +29,18 @@ export default function HeroForm({
   onSubmit,
   isLoading,
 }: HeroFormProps) {
-  const [imageData, setImageData] = useState<UploadedImage[]>([]);
-
+  const [existingImages, setExistingImages] = useState<HeroImage[]>([]);
+  const [newImages, setNewImages] = useState<UploadedImage[]>([]);
+  const [deletedIDs, setDeletedIDs] = useState<number[]>([]);
+  useEffect(() => {
+    if (initialData) {
+      apiClient
+        .get<HeroImage[]>(`/api/images/${initialData.id}`)
+        .then((res) => {
+          setExistingImages(res.data);
+        });
+    }
+  }, []);
   const { register, handleSubmit, control } = useForm<Hero>({
     defaultValues: initialData ?? {
       nickname: "",
@@ -47,12 +61,12 @@ export default function HeroForm({
       const imagesArray: UploadedImage[] = Array.from(e.target.files).map(
         (f) => ({ file: f, preview: URL.createObjectURL(f) })
       );
-      setImageData((prev) => [...prev, ...imagesArray]);
+      setNewImages((prev) => [...prev, ...imagesArray]);
     }
   };
 
   const handleDeleteImage = (src: string) => {
-    setImageData((prev) => prev.filter((item) => item.preview !== src));
+    setNewImages((prev) => prev.filter((item) => item.preview !== src));
   };
 
   return (
@@ -62,7 +76,7 @@ export default function HeroForm({
       </h2>
 
       <form
-        onSubmit={handleSubmit((data) => onSubmit(data, imageData))}
+        onSubmit={handleSubmit((data) => onSubmit(data, newImages))}
         className="space-y-6"
       >
         <div className="space-y-4">
@@ -96,9 +110,18 @@ export default function HeroForm({
           />
         </div>
 
-        <ImageUploader
-          imageData={imageData}
-          onDeleteImage={handleDeleteImage}
+        <Gallery
+          existingImages={existingImages}
+          imageData={newImages}
+          onDeleteNewImage={(id) => {
+            setNewImages((prev) => prev.filter((_, index) => index !== id));
+          }}
+          onDeleteExistingImage={(id) => {
+            console.log(id);
+
+            setDeletedIDs((prev) => [...prev, id]);
+            setExistingImages((prev) => prev.filter((img) => img.id !== id));
+          }}
           onFileChange={handleFileChange}
         />
 

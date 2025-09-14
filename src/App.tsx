@@ -4,6 +4,7 @@ import HeroDetailPage from "./pages/HeroDetailPage";
 import NewHeroPage from "./pages/NewHeroPage";
 
 import { ThemeProvider } from "./components/theme-provider";
+import EditHeroPage from "./pages/EditHeroPage";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
           <Route path="/" element={<HeroesPage />} />
           <Route path="/superheroes/:id" element={<HeroDetailPage />} />
           <Route path="/superheroes/new" element={<NewHeroPage />} />
+          <Route path="/superheroes/:id/edit" element={<EditHeroPage />} />
         </Routes>
       </div>
     </ThemeProvider>

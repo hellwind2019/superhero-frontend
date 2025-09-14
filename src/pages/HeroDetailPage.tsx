@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -37,7 +37,9 @@ export default function HeroDetailsPage() {
         {/* Заголовок */}
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-bold">{hero.nickname}</h1>
-          <Button size="sm">Edit</Button>
+          <Link to={`/superheroes/${id}/edit`}>
+            <Button size="sm">Edit</Button>
+          </Link>
         </div>
         <p className="text-muted-foreground">Real name: {hero.real_name}</p>
 
