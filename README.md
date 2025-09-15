@@ -1,69 +1,41 @@
-# React + TypeScript + Vite
+# Superhero Database
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the frontend for the Superhero application.  
+The backend is deployed on Render.com with a PostgreSQL database.
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1. **Install dependencies:**
+   ```sh
+   npm install
+   ```
+2. **Create a `.env` file:**
+   ```
+   VITE_API_URL=https://your-backend.onrender.com
+   ```
+4. **Start the frontend:**
+    ```sh
+    npm run dev
+    ```
+The app will be available at [http://localhost:5173](http://localhost:5173) (or the port shown by Vite).
 
-## Expanding the ESLint configuration
+---
+## Backend
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- The backend and DB is deployed on Render.com
+- Uses a PostgreSQL database
+- Documentation and setup instructions for the backend are in the https://github.com/hellwind2019/superhero-database
+- Images are stored at Firebase Storage
+---
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 📝 Assumptions
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- The backend API is available at the URL specified in `VITE_API_URL` or defaults to `http://localhost:3000`
+- The API provides the following endpoints:
+  - `GET /api/superheroes`
+  - `POST /api/superheroes`
+  - `PUT /api/superheroes/:id`
+  - `DELETE /api/superheroes/:id`
+  - `GET /api/images/:heroId`
+  - `POST /api/images/upload`
+  - `POST /api/images`
+  - `DELETE /api/images/:id`
