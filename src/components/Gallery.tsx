@@ -1,7 +1,5 @@
 import React from "react";
 import { Label } from "./ui/label";
-import { Button } from "./ui/button";
-import { X } from "lucide-react";
 
 import type { UploadedImage } from "./HeroForm";
 import UploadImageButton from "./UploadImageButton";

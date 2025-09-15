@@ -1,12 +1,5 @@
 import type { Hero } from "@/types";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "./ui/card";
+import { Card, CardContent, CardFooter } from "./ui/card";
 import { Label } from "@radix-ui/react-label";
 
 interface Props {

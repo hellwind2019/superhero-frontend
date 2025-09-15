@@ -3,12 +3,13 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useFieldArray, useForm } from "react-hook-form";
 import { Label } from "@radix-ui/react-label";
-import { useEffect, useState } from "react";
+
 import SuperpowerInputList from "@/components/SuperpowerInputList";
 import Gallery from "@/components/Gallery";
-import type { Hero, HeroImage } from "@/types";
-import apiClient from "@/api-client/api-client";
+import type { Hero } from "@/types";
+
 import { useHeroImages } from "@/hooks/useHeroImages";
+import { useState } from "react";
 
 export interface UploadedImage {
   file: File;
@@ -29,9 +30,7 @@ export default function HeroForm({ initialData, onSubmit, isLoading }: Props) {
   // const [existingImages, setExistingImages] = useState<HeroImage[]>([]);
   const [newImages, setNewImages] = useState<UploadedImage[]>([]);
   const [deletedIDs, setDeletedIDs] = useState<number[]>([]);
-  const { images: existingImages, deleteImage } = useHeroImages(
-    initialData?.id
-  );
+  const { images: existingImages } = useHeroImages(initialData?.id);
 
   const { register, handleSubmit, control } = useForm<Hero>({
     defaultValues: initialData ?? {
@@ -53,7 +52,7 @@ export default function HeroForm({ initialData, onSubmit, isLoading }: Props) {
       const imagesArray: UploadedImage[] = Array.from(e.target.files).map(
         (f) => ({ file: f, preview: URL.createObjectURL(f) })
       );
-      setNewImages((prev) => [...prev, ...imagesArray]);
+      setNewImages((prev: UploadedImage[]) => [...prev, ...imagesArray]);
     }
   };
 
@@ -104,7 +103,9 @@ export default function HeroForm({ initialData, onSubmit, isLoading }: Props) {
           )}
           imageData={newImages}
           onDeleteNewImage={(id) => {
-            setNewImages((prev) => prev.filter((_, index) => index !== id));
+            setNewImages((prev: UploadedImage[]) =>
+              prev.filter((_img, index) => index !== id)
+            );
           }}
           onDeleteExistingImage={(id) => {
             console.log(id);

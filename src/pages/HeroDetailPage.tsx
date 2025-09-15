@@ -55,7 +55,7 @@ export default function HeroDetailsPage() {
           <img
             src={images[0].image_url}
             alt={hero.nickname}
-            className="w-full max-h-[250px] object-cover rounded-lg shadow"
+            className="w-full max-h-100 object-cover rounded-lg shadow"
           />
         )}
 
