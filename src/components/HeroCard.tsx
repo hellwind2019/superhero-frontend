@@ -17,7 +17,7 @@ const HeroCard = ({ hero }: Props) => {
   return (
     <Card className="p-0">
       <img
-        src={hero.first_image}
+        src={hero.first_image || "no-image.png"}
         alt=""
         className="aspect-16/9 rounded-t-xl object-cover"
       />

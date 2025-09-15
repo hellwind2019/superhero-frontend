@@ -34,6 +34,11 @@ export function useHeroApi() {
   ) => {
     await apiClient.put<Hero>(`/api/superheroes/${id}`, data);
 
+    await Promise.all(
+      deletedImageIDs.map((id) => {
+        apiClient.delete(`/api/images/${id}`);
+      })
+    );
     if (images.length > 0) {
       const formData = new FormData();
       images.forEach((img) => formData.append("images", img.file));
@@ -44,7 +49,6 @@ export function useHeroApi() {
         { headers: { "Content-Type": "multipart/form-data" } }
       );
       const uploadedUrls = uploadRes.data.urls;
-
       await Promise.all(
         uploadedUrls.map((url) =>
           apiClient.post("/api/images", { hero_id: id, image_url: url })

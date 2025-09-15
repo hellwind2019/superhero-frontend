@@ -4,9 +4,18 @@ import { Link } from "react-router-dom";
 import HeroCard from "./HeroCard";
 import { Plus } from "lucide-react";
 import { Button } from "./ui/button";
+import Pagination from "./Pagination";
+import { useState } from "react";
 
 const HeroGrid = () => {
   const { heroes, isLoading, error } = useHeroes();
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemPerPage = 5;
+  const totalPages = Math.ceil(heroes.length / itemPerPage);
+  const displayedHeroes = heroes.slice(
+    (currentPage - 1) * itemPerPage,
+    currentPage * itemPerPage
+  );
   if (isLoading) return <p>Loading heroes...</p>;
   if (error) return <p>{error}</p>;
 
@@ -23,8 +32,8 @@ const HeroGrid = () => {
           </Button>
         </Link>
       </div>
-      <div className="grid gap-4 grid-cols-3">
-        {heroes.map((hero) => (
+      <div className="m-auto grid gap-4 grid-cols-3 max-w-7xl">
+        {displayedHeroes.map((hero) => (
           <Link
             key={hero.id}
             to={`/superheroes/${hero.id}`}
@@ -34,6 +43,11 @@ const HeroGrid = () => {
           </Link>
         ))}
       </div>
+      <Pagination
+        totalPages={totalPages}
+        currentPage={currentPage}
+        onPageChange={setCurrentPage}
+      />
     </div>
   );
 };

@@ -14,21 +14,17 @@ export interface UploadedImage {
   preview: string;
 }
 
-interface HeroFormProps {
+interface Props {
   initialData?: Hero; // для Edit
   onSubmit: (
     data: Hero,
     images: UploadedImage[],
-    deletedImageIDs?: number[]
+    deletedImageIDs: number[]
   ) => Promise<void>;
   isLoading?: boolean;
 }
 
-export default function HeroForm({
-  initialData,
-  onSubmit,
-  isLoading,
-}: HeroFormProps) {
+export default function HeroForm({ initialData, onSubmit, isLoading }: Props) {
   const [existingImages, setExistingImages] = useState<HeroImage[]>([]);
   const [newImages, setNewImages] = useState<UploadedImage[]>([]);
   const [deletedIDs, setDeletedIDs] = useState<number[]>([]);
@@ -65,10 +61,6 @@ export default function HeroForm({
     }
   };
 
-  const handleDeleteImage = (src: string) => {
-    setNewImages((prev) => prev.filter((item) => item.preview !== src));
-  };
-
   return (
     <div className="max-w-2xl mx-auto p-6 rounded-lg shadow-sm border">
       <h2 className="text-2xl font-semibold mb-6">
@@ -76,7 +68,7 @@ export default function HeroForm({
       </h2>
 
       <form
-        onSubmit={handleSubmit((data) => onSubmit(data, newImages))}
+        onSubmit={handleSubmit((data) => onSubmit(data, newImages, deletedIDs))}
         className="space-y-6"
       >
         <div className="space-y-4">
