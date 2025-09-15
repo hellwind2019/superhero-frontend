@@ -6,14 +6,18 @@ import { Badge } from "@/components/ui/badge";
 import apiClient from "@/api-client/api-client"; // твій axios інстанс
 import type { Hero, HeroImage } from "@/types";
 
+import DeleteDialog from "@/components/DeleteDialog";
+import { useHeroApi } from "@/hooks/useHeroApi";
+
 export default function HeroDetailsPage() {
   const { id } = useParams();
   const [hero, setHero] = useState<Hero | null>(null);
   const [images, setImages] = useState<HeroImage[]>([]);
   const [loading, setLoading] = useState(true);
+  const { deleteHero } = useHeroApi();
 
   useEffect(() => {
-    async function fetchHero() {
+    const fetchHero = async () => {
       try {
         const heroRes = await apiClient.get<Hero>(`/api/superheroes/${id}`);
         const imagesRes = await apiClient.get<HeroImage[]>(`/api/images/${id}`);
@@ -24,26 +28,29 @@ export default function HeroDetailsPage() {
       } finally {
         setLoading(false);
       }
-    }
+    };
     fetchHero();
   }, [id]);
-
+  const handleDeleteHero = () => {
+    deleteHero(id!);
+  };
   if (loading) return <p>Loading...</p>;
   if (!hero) return <p>Hero not found</p>;
 
   return (
     <div className="container mx-auto py-8 flex justify-center">
       <div className="w-full max-w-2xl space-y-6">
-        {/* Заголовок */}
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-bold">{hero.nickname}</h1>
-          <Link to={`/superheroes/${id}/edit`}>
-            <Button size="sm">Edit</Button>
-          </Link>
+          <div className="flex gap-4">
+            <DeleteDialog onSumbit={handleDeleteHero} />
+            <Link to={`/superheroes/${id}/edit`}>
+              <Button size="sm">Edit</Button>
+            </Link>
+          </div>
         </div>
         <p className="text-muted-foreground">Real name: {hero.real_name}</p>
 
-        {/* Головна картинка */}
         {images[0] && (
           <img
             src={images[0].image_url}
@@ -52,7 +59,6 @@ export default function HeroDetailsPage() {
           />
         )}
 
-        {/* Інфо */}
         <Card>
           <CardHeader>
             <CardTitle>Origin</CardTitle>
@@ -86,7 +92,6 @@ export default function HeroDetailsPage() {
           </CardContent>
         </Card>
 
-        {/* Галерея картинок */}
         {images.length > 0 && (
           <Card>
             <CardHeader>

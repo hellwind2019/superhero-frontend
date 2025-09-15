@@ -6,6 +6,7 @@ import { Plus } from "lucide-react";
 import { Button } from "./ui/button";
 import Pagination from "./Pagination";
 import { useState } from "react";
+import { Separator } from "./ui/separator";
 
 const HeroGrid = () => {
   const { heroes, isLoading, error } = useHeroes();
@@ -43,6 +44,7 @@ const HeroGrid = () => {
           </Link>
         ))}
       </div>
+      <Separator className="my-6" />
       <Pagination
         totalPages={totalPages}
         currentPage={currentPage}

@@ -6,12 +6,14 @@ interface Props {
 }
 const Pagination = ({ totalPages, currentPage, onPageChange }: Props) => {
   return (
-    <div className="flex gap-2 my-4 w-full mx-auto">
+    <div className="flex gap-2 w-full justify-center">
       {[...Array(totalPages)].map((_, index) => (
         <Button
           key={index}
           onClick={() => onPageChange(index + 1)}
-          className={currentPage === index + 1 ? "active" : ""}
+          className={
+            currentPage === index + 1 ? "active bg-gray-300" : "bg-gray-600"
+          }
         >
           {index + 1}
         </Button>

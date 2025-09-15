@@ -1,8 +1,10 @@
 import apiClient from "@/api-client/api-client";
 import type { Hero } from "@/types";
 import type { UploadedImage } from "@/components/HeroForm";
+import { useNavigate } from "react-router-dom";
 
 export function useHeroApi() {
+  const navigate = useNavigate();
   const createHero = async (data: Hero, images: UploadedImage[]) => {
     const formData = new FormData();
     images.forEach((img) => formData.append("images", img.file));
@@ -56,6 +58,9 @@ export function useHeroApi() {
       );
     }
   };
-
-  return { createHero, updateHero };
+  const deleteHero = async (id: string) => {
+    await apiClient.delete(`/api/superheroes/${id}`);
+    navigate(`/`);
+  };
+  return { createHero, updateHero, deleteHero };
 }

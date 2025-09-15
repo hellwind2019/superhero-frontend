@@ -8,6 +8,7 @@ import SuperpowerInputList from "@/components/SuperpowerInputList";
 import Gallery from "@/components/Gallery";
 import type { Hero, HeroImage } from "@/types";
 import apiClient from "@/api-client/api-client";
+import { useHeroImages } from "@/hooks/useHeroImages";
 
 export interface UploadedImage {
   file: File;
@@ -25,18 +26,13 @@ interface Props {
 }
 
 export default function HeroForm({ initialData, onSubmit, isLoading }: Props) {
-  const [existingImages, setExistingImages] = useState<HeroImage[]>([]);
+  // const [existingImages, setExistingImages] = useState<HeroImage[]>([]);
   const [newImages, setNewImages] = useState<UploadedImage[]>([]);
   const [deletedIDs, setDeletedIDs] = useState<number[]>([]);
-  useEffect(() => {
-    if (initialData) {
-      apiClient
-        .get<HeroImage[]>(`/api/images/${initialData.id}`)
-        .then((res) => {
-          setExistingImages(res.data);
-        });
-    }
-  }, []);
+  const { images: existingImages, deleteImage } = useHeroImages(
+    initialData?.id
+  );
+
   const { register, handleSubmit, control } = useForm<Hero>({
     defaultValues: initialData ?? {
       nickname: "",
@@ -103,7 +99,9 @@ export default function HeroForm({ initialData, onSubmit, isLoading }: Props) {
         </div>
 
         <Gallery
-          existingImages={existingImages}
+          existingImages={existingImages.filter(
+            (img) => !deletedIDs.includes(img.id!)
+          )}
           imageData={newImages}
           onDeleteNewImage={(id) => {
             setNewImages((prev) => prev.filter((_, index) => index !== id));
@@ -112,13 +110,17 @@ export default function HeroForm({ initialData, onSubmit, isLoading }: Props) {
             console.log(id);
 
             setDeletedIDs((prev) => [...prev, id]);
-            setExistingImages((prev) => prev.filter((img) => img.id !== id));
+            // setExistingImages((prev) => prev.filter((img) => img.id !== id));
           }}
           onFileChange={handleFileChange}
         />
 
         <div className="pt-4 border-t border-gray-100">
-          <Button type="submit" className="w-full font-medium py-3">
+          <Button
+            type="submit"
+            className="w-full font-medium py-3"
+            disabled={isLoading}
+          >
             {isLoading
               ? "Saving..."
               : initialData

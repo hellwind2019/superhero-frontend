@@ -15,12 +15,12 @@ const useHeroes = () => {
       .get<Hero[]>("/api/superheroes", { signal: controller.signal })
       .then((res) => {
         setHeroes(res.data);
-        // setLoading(false);
+        // setIsLoading(false);
       })
       .catch((err) => {
         if (err instanceof CanceledError) return;
         setError(err.message);
-        // setLoading(false)
+        // setIsLoading(false);
       })
       .finally(() => setIsLoading(false));
   }, []);
