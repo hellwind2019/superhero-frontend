@@ -7,14 +7,14 @@ import apiClient from "@/api-client/api-client"; // твій axios інстан�
 import type { Hero, HeroImage } from "@/types";
 
 import DeleteDialog from "@/components/DeleteDialog";
-import { useHeroApi } from "@/hooks/useHeroApi";
+import { useHeroes } from "@/hooks/useHeroes";
 
 export default function HeroDetailsPage() {
   const { id } = useParams();
   const [hero, setHero] = useState<Hero | null>(null);
   const [images, setImages] = useState<HeroImage[]>([]);
   const [loading, setLoading] = useState(true);
-  const { deleteHero } = useHeroApi();
+  const { deleteHero } = useHeroes();
 
   useEffect(() => {
     const fetchHero = async () => {

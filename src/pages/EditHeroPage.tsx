@@ -2,14 +2,14 @@ import HeroForm, { type UploadedImage } from "@/components/HeroForm";
 import type { Hero } from "@/types";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useHeroApi } from "@/hooks/useHeroApi";
+import { useHeroes } from "@/hooks/useHeroes";
 import apiClient from "@/api-client/api-client";
 
 const EditHeroPage = () => {
   const { id } = useParams<{ id: string }>();
   const [hero, setHero] = useState<Hero | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const { updateHero } = useHeroApi();
+  const { updateHero } = useHeroes();
 
   useEffect(() => {
     apiClient

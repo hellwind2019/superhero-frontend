@@ -1,12 +1,12 @@
 import HeroForm, { type UploadedImage } from "@/components/HeroForm";
 import type { Hero } from "@/types";
 import { useState } from "react";
-import { useHeroApi } from "@/hooks/useHeroApi";
+import { useHeroes } from "@/hooks/useHeroes";
 import { useNavigate } from "react-router-dom";
 
 const NewHeroPage = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const { createHero } = useHeroApi();
+  const { createHero } = useHeroes();
   const navigate = useNavigate();
 
   const handleCreate = async (data: Hero, images: UploadedImage[]) => {

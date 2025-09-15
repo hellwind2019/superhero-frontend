@@ -1,5 +1,3 @@
-import useHeroes from "@/hooks/useHeroes";
-
 import { Link } from "react-router-dom";
 import HeroCard from "./HeroCard";
 import { Plus } from "lucide-react";
@@ -7,6 +5,7 @@ import { Button } from "./ui/button";
 import Pagination from "./Pagination";
 import { useState } from "react";
 import { Separator } from "./ui/separator";
+import { useHeroes } from "@/hooks/useHeroes";
 
 const HeroGrid = () => {
   const { heroes, isLoading, error } = useHeroes();
