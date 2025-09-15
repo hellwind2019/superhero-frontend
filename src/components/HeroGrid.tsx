@@ -32,7 +32,7 @@ const HeroGrid = () => {
           </Button>
         </Link>
       </div>
-      <div className="m-auto grid gap-4 grid-cols-3 max-w-7xl">
+      <div className="m-auto grid gap-4 sm:grid-cols-1 md:grid-cols-3 max-w-7xl">
         {displayedHeroes.map((hero) => (
           <Link
             key={hero.id}

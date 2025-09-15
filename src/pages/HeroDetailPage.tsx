@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -15,7 +15,7 @@ export default function HeroDetailsPage() {
   const [images, setImages] = useState<HeroImage[]>([]);
   const [loading, setLoading] = useState(true);
   const { deleteHero } = useHeroes();
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchHero = async () => {
       try {
@@ -39,8 +39,11 @@ export default function HeroDetailsPage() {
 
   return (
     <div className="container mx-auto py-8 flex justify-center">
-      <div className="w-full max-w-2xl space-y-6">
+      <div className="w-2xl max-w-2xl space-y-6">
         <div className="flex items-center justify-between">
+          <Button variant="outline" size="sm" onClick={() => navigate(-1)}>
+            ← Back
+          </Button>
           <h1 className="text-3xl font-bold">{hero.nickname}</h1>
           <div className="flex gap-4">
             <DeleteDialog onSumbit={handleDeleteHero} />
@@ -49,6 +52,7 @@ export default function HeroDetailsPage() {
             </Link>
           </div>
         </div>
+
         <p className="text-muted-foreground">Real name: {hero.real_name}</p>
 
         {images[0] && (
